@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<EmBitz_layout_file>
+	<ActiveTarget name="Debug" />
+	<File name="appconf\appconf_default.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="12977" topLine="444" />
+		</Cursor>
+	</File>
+	<File name="applications\app.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="795" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="applications\app_adc.c" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="10845" topLine="366" />
+		</Cursor>
+	</File>
+	<File name="ChibiOS_3.0.5\ext\stdperiph_stm32f4\inc\stm32f4xx_tim.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="50879" topLine="1115" />
+		</Cursor>
+	</File>
+	<File name="ChibiOS_3.0.5\os\rt\include\chsystypes.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2195" topLine="45" />
+		</Cursor>
+	</File>
+	<File name="ChibiOS_3.0.5\os\rt\include\chtm.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1757" topLine="28" />
+		</Cursor>
+	</File>
+	<File name="commands.c" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="37430" topLine="1243" />
+		</Cursor>
+	</File>
+	<File name="conf_general.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="28421" topLine="1096" />
+		</Cursor>
+	</File>
+	<File name="conf_general.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="867" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="encoder.c" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="13995" topLine="467" />
+		</Cursor>
+	</File>
+	<File name="encoder.h" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1276" topLine="6" />
+		</Cursor>
+	</File>
+	<File name="hwconf\hw_410.h" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="4213" topLine="130" />
+		</Cursor>
+	</File>
+	<File name="hwconf\hw_60.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="961" topLine="12" />
+		</Cursor>
+	</File>
+	<File name="hwconf\hw_axiom.c" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="17943" topLine="497" />
+		</Cursor>
+	</File>
+	<File name="main.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="5858" topLine="66" />
+		</Cursor>
+	</File>
+	<File name="mc_interface.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="30652" topLine="1272" />
+		</Cursor>
+	</File>
+	<File name="mcpwm.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="59836" topLine="2097" />
+		</Cursor>
+	</File>
+	<File name="mcpwm_foc.c" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="32581" topLine="1221" />
+		</Cursor>
+	</File>
+	<File name="terminal.c" open="1" top="1" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="29926" topLine="789" />
+		</Cursor>
+	</File>
+	<File name="utils.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="16211" topLine="761" />
+		</Cursor>
+	</File>
+	<File name="utils.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1013" topLine="0" />
+		</Cursor>
+	</File>
+</EmBitz_layout_file>

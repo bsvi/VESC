@@ -368,6 +368,9 @@ float encoder_read_deg(void) {
  * Reset the encoder counter. Should be called from the index interrupt.
  */
 void encoder_reset(void) {
+//VS Changes ---------------------------------------------------------------------
+    return;
+//VS Changes ---------------------------------------------------------------------
 	// Only reset if the pin is still high to avoid too short pulses, which
 	// most likely are noise.
 	__NOP();
@@ -399,6 +402,14 @@ void encoder_reset(void) {
 	}
 }
 
+//VS Changes ---------------------------------------------------------------------
+void encoder_set_index(void) {
+    HW_ENC_TIM->CNT = 0;
+    index_found = true;
+}
+//VS Changes ---------------------------------------------------------------------
+
+
 // returns true for even number of ones (no parity error according to AS5047 datasheet
 bool spi_check_parity(uint16_t x) {
 	x ^= x >> 8;
@@ -427,7 +438,7 @@ void encoder_tim_isr(void) {
 		} else {
 			++spi_error_cnt;
 			UTILS_LP_FAST(spi_error_rate, 1.0, 1./AS5047_SAMPLE_RATE_HZ);
-		}		
+		}
 	}
 
 	if(mode == RESOLVER_MODE_AD2S1205) {

@@ -1,0 +1,14 @@
+#!/bin/bash
+set -e
+
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+FWPATH=$DIR/../
+COPYDIR=$FWPATH"build412"	
+
+rm -f $COPYDIR/VESC_default.bin
+
+cd $FWPATH
+touch conf_general.h
+make -j8 build_args='-DHW_SOURCE=\"hw_410.c\" -DHW_HEADER=\"hw_410.h\"' USE_VERBOSE_COMPILE=no
+cp ./build/BLDC_4_ChibiOS.bin $COPYDIR/VESC_default.bin
+
