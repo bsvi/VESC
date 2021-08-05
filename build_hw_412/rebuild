@@ -3,7 +3,7 @@ set -e
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 FWPATH=$DIR/../
-COPYDIR=$FWPATH"build412"	
+COPYDIR=$FWPATH"build_hw_412"	
 
 rm -f $COPYDIR/VESC_default.bin
 
