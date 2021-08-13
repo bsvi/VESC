@@ -25,7 +25,7 @@
 #define FW_VERSION_MINOR		62
 
 #define FW_REVISION_MAJOR		1
-#define FW_REVISION_MINOR		0
+#define FW_REVISION_MINOR		1
 
 #include "datatypes.h"
 

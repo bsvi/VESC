@@ -3,7 +3,12 @@
 	<ActiveTarget name="Debug" />
 	<File name="appconf\appconf_default.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="12977" topLine="444" />
+			<Cursor1 position="5408" topLine="171" />
+		</Cursor>
+	</File>
+	<File name="applications\app.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2794" topLine="109" />
 		</Cursor>
 	</File>
 	<File name="applications\app.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -14,6 +19,21 @@
 	<File name="applications\app_adc.c" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="10845" topLine="366" />
+		</Cursor>
+	</File>
+	<File name="applications\app_uartcomm.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="4290" topLine="128" />
+		</Cursor>
+	</File>
+	<File name="buffer.c" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1110" topLine="15" />
+		</Cursor>
+	</File>
+	<File name="buffer.h" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1522" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="ChibiOS_3.0.5\ext\stdperiph_stm32f4\inc\stm32f4xx_tim.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -31,9 +51,9 @@
 			<Cursor1 position="1757" topLine="28" />
 		</Cursor>
 	</File>
-	<File name="commands.c" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="commands.c" open="1" top="1" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="37430" topLine="1243" />
+			<Cursor1 position="10392" topLine="326" />
 		</Cursor>
 	</File>
 	<File name="conf_general.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -46,12 +66,22 @@
 			<Cursor1 position="867" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="encoder.c" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="confgenerator.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="40784" topLine="696" />
+		</Cursor>
+	</File>
+	<File name="datatypes.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="13327" topLine="594" />
+		</Cursor>
+	</File>
+	<File name="encoder.c" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="13995" topLine="467" />
 		</Cursor>
 	</File>
-	<File name="encoder.h" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="encoder.h" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="1276" topLine="6" />
 		</Cursor>
@@ -86,14 +116,14 @@
 			<Cursor1 position="59836" topLine="2097" />
 		</Cursor>
 	</File>
-	<File name="mcpwm_foc.c" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="mcpwm_foc.c" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="32581" topLine="1221" />
 		</Cursor>
 	</File>
-	<File name="terminal.c" open="1" top="1" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="terminal.c" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="29926" topLine="789" />
+			<Cursor1 position="29926" topLine="729" />
 		</Cursor>
 	</File>
 	<File name="utils.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
