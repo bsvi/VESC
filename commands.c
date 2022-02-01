@@ -184,6 +184,9 @@ void commands_process_packet(unsigned char *data, unsigned int len,
 
 		send_buffer[ind++] = app_get_configuration()->pairing_done;
 
+		send_buffer[ind++] = FW_REVISION_MAJOR;
+		send_buffer[ind++] = FW_REVISION_MINOR;
+
 		reply_func(send_buffer, ind);
 	} break;
 
@@ -327,6 +330,8 @@ void commands_process_packet(unsigned char *data, unsigned int len,
 			buffer_append_float32(send_buffer, mc_interface_read_reset_avg_vq(), 1e3, &ind);
 		}
 
+		buffer_append_int16(send_buffer, encoder_index_found(), &ind);
+
 		reply_func(send_buffer, ind);
 		chMtxUnlock(&send_buffer_mutex);
 	} break;
@@ -351,6 +356,7 @@ void commands_process_packet(unsigned char *data, unsigned int len,
 
 	case COMM_SET_RPM: {
 		int32_t ind = 0;
+
 		mc_interface_set_pid_speed((float)buffer_get_int32(data, &ind));
 		timeout_reset();
 	} break;
@@ -954,6 +960,7 @@ void commands_process_packet(unsigned char *data, unsigned int len,
 	case COMM_BM_MAP_PINS_DEFAULT:
 	case COMM_BM_MAP_PINS_NRF5X:
 	case COMM_BM_MEM_READ:
+    case COMM_ZERO_ENCODER:
 		if (!is_blocking) {
 			memcpy(blocking_thread_cmd_buffer, data - 1, len + 1);
 			blocking_thread_cmd_len = len;
@@ -1286,6 +1293,22 @@ static THD_FUNCTION(blocking_thread, arg) {
 					send_func_blocking(send_buffer, ind);
 				}
 			}
+		} break;
+
+		case COMM_ZERO_ENCODER: {
+		    uint8_t result = 0;
+			if (encoder_is_configured()) {
+				int32_t ind = 0;
+				float current = buffer_get_float32(data, 1e3, &ind);
+				result = mcpwm_foc_zero_encoder(current, false);
+			}
+
+            send_buffer[0] = COMM_ZERO_ENCODER;
+            send_buffer[1] = result;
+
+            if (send_func_blocking) {
+                send_func_blocking(send_buffer, 2);
+            }
 		} break;
 
 		case COMM_DETECT_HALL_FOC: {

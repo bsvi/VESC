@@ -794,7 +794,7 @@ void terminal_process_string(char *str) {
 		commands_printf("foc_detect_apply_all_can [max_power_loss_W]");
 		commands_printf("  Detect and apply all motor settings, based on maximum resistive motor power losses. Also");
 		commands_printf("  initiates detection in all VESCs found on the CAN-bus.");
-		
+
 		commands_printf("encoder");
 		commands_printf("  Prints the status of the AS5047, AD2S1205, or Sin/Cos encoder.");
 
@@ -817,7 +817,9 @@ void terminal_process_string(char *str) {
 		}
 
 		commands_printf(" ");
-	} else {
+	} else if (strcmp(argv[0], "ver") == 0) {
+	    commands_printf("  FW Version %d.%d r%d.%d", FW_VERSION_MAJOR, FW_VERSION_MINOR, FW_REVISION_MAJOR, FW_REVISION_MINOR);
+    }else {
 		bool found = false;
 		for (int i = 0;i < callback_write;i++) {
 			if (callbacks[i].cbf != 0 && strcmp(argv[0], callbacks[i].command) == 0) {
