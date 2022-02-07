@@ -195,8 +195,10 @@ void flash_helper_jump_to_bootloader(void) {
 	usbStop(&USBD1);
 
 	sdStop(&HW_UART_DEV);
+	#ifndef HW_UART_DISABLE
 	palSetPadMode(HW_UART_TX_PORT, HW_UART_TX_PIN, PAL_MODE_INPUT);
 	palSetPadMode(HW_UART_RX_PORT, HW_UART_RX_PIN, PAL_MODE_INPUT);
+	#endif
 
 	// Disable watchdog
 	timeout_configure_IWDT_slowest();

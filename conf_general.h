@@ -27,6 +27,9 @@
 #define FW_REVISION_MAJOR		1
 #define FW_REVISION_MINOR		1
 
+#define FW_REVISION_MAJOR		1
+#define FW_REVISION_MINOR	        2
+
 #include "datatypes.h"
 
 // Settings and parameters to override

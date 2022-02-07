@@ -687,7 +687,6 @@ typedef enum {
 	COMM_PLOT_SET_GRAPH,        //78
 	COMM_GET_DECODED_BALANCE,   //79
 	COMM_BM_MEM_READ,           //80
-	COMM_ZERO_ENCODER           = 250,
 } COMM_PACKET_ID;
 
 // CAN commands

@@ -129,7 +129,7 @@ float encoder_sincos_get_signal_above_max_error_rate(void) {
 }
 
 void encoder_deinit(void) {
-	nvicDisableVector(HW_ENC_EXTI_CH);
+	//nvicDisableVector(HW_ENC_EXTI_CH);
 	nvicDisableVector(HW_ENC_TIM_ISR_CH);
 
 	TIM_DeInit(HW_ENC_TIM);
@@ -138,8 +138,8 @@ void encoder_deinit(void) {
 	palSetPadMode(SPI_SW_SCK_GPIO, SPI_SW_SCK_PIN, PAL_MODE_INPUT_PULLUP);
 	palSetPadMode(SPI_SW_CS_GPIO, SPI_SW_CS_PIN, PAL_MODE_INPUT_PULLUP);
 
-	palSetPadMode(HW_HALL_ENC_GPIO1, HW_HALL_ENC_PIN1, PAL_MODE_INPUT_PULLUP);
-	palSetPadMode(HW_HALL_ENC_GPIO2, HW_HALL_ENC_PIN2, PAL_MODE_INPUT_PULLUP);
+	palSetPadMode(HW_ENC_GPIO1, HW_ENC_PIN1, PAL_MODE_INPUT_PULLUP);
+	palSetPadMode(HW_ENC_GPIO2, HW_ENC_PIN2, PAL_MODE_INPUT_PULLUP);
 
 	index_found = false;
 	mode = ENCODER_MODE_NONE;
@@ -150,15 +150,15 @@ void encoder_deinit(void) {
 }
 
 void encoder_init_abi(uint32_t counts) {
-	EXTI_InitTypeDef   EXTI_InitStructure;
+	//EXTI_InitTypeDef   EXTI_InitStructure;
 
 	// Initialize variables
 	index_found = false;
 	enc_counts = counts;
 
-	palSetPadMode(HW_HALL_ENC_GPIO1, HW_HALL_ENC_PIN1, PAL_MODE_ALTERNATE(HW_ENC_TIM_AF));
-	palSetPadMode(HW_HALL_ENC_GPIO2, HW_HALL_ENC_PIN2, PAL_MODE_ALTERNATE(HW_ENC_TIM_AF));
-//	palSetPadMode(HW_HALL_ENC_GPIO3, HW_HALL_ENC_PIN3, PAL_MODE_ALTERNATE(HW_ENC_TIM_AF));
+	palSetPadMode(HW_ENC_GPIO1, HW_ENC_PIN1, PAL_MODE_ALTERNATE(HW_ENC_TIM_AF));
+	palSetPadMode(HW_ENC_GPIO2, HW_ENC_PIN2, PAL_MODE_ALTERNATE(HW_ENC_TIM_AF));
+//	palSetPadMode(HW_ENC_GPIO3, HW_ENC_PIN3, PAL_MODE_ALTERNATE(HW_ENC_TIM_AF));
 
 	// Enable timer clock
 	HW_ENC_TIM_CLK_EN();
@@ -180,17 +180,17 @@ void encoder_init_abi(uint32_t counts) {
 	// Interrupt on index pulse
 
 	// Connect EXTI Line to pin
-	SYSCFG_EXTILineConfig(HW_ENC_EXTI_PORTSRC, HW_ENC_EXTI_PINSRC);
+	//	SYSCFG_EXTILineConfig(HW_ENC_EXTI_PORTSRC, HW_ENC_EXTI_PINSRC);
 
 	// Configure EXTI Line
-	EXTI_InitStructure.EXTI_Line = HW_ENC_EXTI_LINE;
-	EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
-	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;
-	EXTI_InitStructure.EXTI_LineCmd = ENABLE;
-	EXTI_Init(&EXTI_InitStructure);
+	//EXTI_InitStructure.EXTI_Line = HW_ENC_EXTI_LINE;
+	//EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
+	//EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;
+	//EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+	//EXTI_Init(&EXTI_InitStructure);
 
 	// Enable and set EXTI Line Interrupt to the highest priority
-	nvicEnableVector(HW_ENC_EXTI_CH, 0);
+	// nvicEnableVector(HW_ENC_EXTI_CH, 0);
 
 	mode = ENCODER_MODE_ABI;
 }
@@ -373,33 +373,33 @@ void encoder_reset(void) {
 //VS Changes ---------------------------------------------------------------------
 	// Only reset if the pin is still high to avoid too short pulses, which
 	// most likely are noise.
-	__NOP();
-	__NOP();
-	__NOP();
-	__NOP();
-	if (palReadPad(HW_HALL_ENC_GPIO3, HW_HALL_ENC_PIN3)) {
-		const unsigned int cnt = HW_ENC_TIM->CNT;
-		static int bad_pulses = 0;
-		const unsigned int lim = enc_counts / 20;
+	// __NOP();
+	// __NOP();
+	// __NOP();
+	// __NOP();
+	// if (palReadPad(HW_ENC_GPIO3, HW_ENC_PIN3)) {
+	// 	const unsigned int cnt = HW_ENC_TIM->CNT;
+	// 	static int bad_pulses = 0;
+	// 	const unsigned int lim = enc_counts / 20;
 
-		if (index_found) {
-			// Some plausibility filtering.
-			if (cnt > (enc_counts - lim) || cnt < lim) {
-				HW_ENC_TIM->CNT = 0;
-				bad_pulses = 0;
-			} else {
-				bad_pulses++;
+	// 	if (index_found) {
+	// 		// Some plausibility filtering.
+	// 		if (cnt > (enc_counts - lim) || cnt < lim) {
+	// 			HW_ENC_TIM->CNT = 0;
+	// 			bad_pulses = 0;
+	// 		} else {
+	// 			bad_pulses++;
 
-				if (bad_pulses > 5) {
-					index_found = 0;
-				}
-			}
-		} else {
-			HW_ENC_TIM->CNT = 0;
-			index_found = true;
-			bad_pulses = 0;
-		}
-	}
+	// 			if (bad_pulses > 5) {
+	// 				index_found = 0;
+	// 			}
+	// 		}
+	// 	} else {
+	// 		HW_ENC_TIM->CNT = 0;
+	// 		index_found = true;
+	// 		bad_pulses = 0;
+	// 	}
+	// }
 }
 
 //VS Changes ---------------------------------------------------------------------

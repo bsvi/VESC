@@ -92,8 +92,10 @@ static THD_FUNCTION(adc_thread, arg) {
 
 	// Set servo pin as an input with pullup
 	if (use_rx_tx_as_buttons) {
+		#ifndef HW_UART_DISABLE
 		palSetPadMode(HW_UART_TX_PORT, HW_UART_TX_PIN, PAL_MODE_INPUT_PULLUP);
 		palSetPadMode(HW_UART_RX_PORT, HW_UART_RX_PIN, PAL_MODE_INPUT_PULLUP);
+		#endif
 	} else {
 		palSetPadMode(HW_ICU_GPIO, HW_ICU_PIN, PAL_MODE_INPUT_PULLUP);
 	}
