@@ -960,7 +960,7 @@ void commands_process_packet(unsigned char *data, unsigned int len,
 	case COMM_BM_MAP_PINS_DEFAULT:
 	case COMM_BM_MAP_PINS_NRF5X:
 	case COMM_BM_MEM_READ:
-    case COMM_ZERO_ENCODER:
+
 		if (!is_blocking) {
 			memcpy(blocking_thread_cmd_buffer, data - 1, len + 1);
 			blocking_thread_cmd_len = len;
@@ -1293,22 +1293,6 @@ static THD_FUNCTION(blocking_thread, arg) {
 					send_func_blocking(send_buffer, ind);
 				}
 			}
-		} break;
-
-		case COMM_ZERO_ENCODER: {
-		    uint8_t result = 0;
-			if (encoder_is_configured()) {
-				int32_t ind = 0;
-				float current = buffer_get_float32(data, 1e3, &ind);
-				result = mcpwm_foc_zero_encoder(current, false);
-			}
-
-            send_buffer[0] = COMM_ZERO_ENCODER;
-            send_buffer[1] = result;
-
-            if (send_func_blocking) {
-                send_func_blocking(send_buffer, 2);
-            }
 		} break;
 
 		case COMM_DETECT_HALL_FOC: {
