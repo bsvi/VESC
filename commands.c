@@ -1294,22 +1294,6 @@ static THD_FUNCTION(blocking_thread, arg) {
 			}
 		} break;
 
-		case COMM_ZERO_ENCODER: {
-		    uint8_t result = 0;
-			if (encoder_is_configured()) {
-				int32_t ind = 0;
-				float current = buffer_get_float32(data, 1e3, &ind);
-				result = mcpwm_foc_zero_encoder(current, false);
-			}
-
-            send_buffer[0] = COMM_ZERO_ENCODER;
-            send_buffer[1] = result;
-
-            if (send_func_blocking) {
-                send_func_blocking(send_buffer, 2);
-            }
-		} break;
-
 		case COMM_DETECT_HALL_FOC: {
 			mcconf = *mc_interface_get_configuration();
 
