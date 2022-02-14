@@ -136,6 +136,8 @@ static void start_pwm_hw(void);
 static int read_hall(void);
 static float correct_encoder(float obs_angle, float enc_angle, float speed);
 static float correct_hall(float angle, float speed, float dt);
+static void correct_encoder_with_hall(float speed);
+
 
 // Threads
 static THD_WORKING_AREA(timer_thread_wa, 2048);
@@ -1718,6 +1720,18 @@ bool mcpwm_foc_hall_detect(float current, uint8_t *hall_table) {
 	return fails == 2;
 }
 
+float mcpwm_foc_get_hall_phase(void) {
+	int hall_position = read_hall();
+	int ang_hall_int = m_conf->foc_hall_table[hall_position];
+	if (ang_hall_int > 200) {
+		return 0;
+	} else {
+		float ang_hall_now = ((float)ang_hall_int / 200.0) * 360.0;
+		return ang_hall_now;
+	}
+}
+
+
 void mcpwm_foc_print_state(void) {
 	commands_printf("Mod d:        %.2f", (double)m_motor_state.mod_d);
 	commands_printf("Mod q:        %.2f", (double)m_motor_state.mod_q);
@@ -1737,6 +1751,19 @@ void mcpwm_foc_print_state(void) {
 	commands_printf("i_abs_filter: %.2f", (double)m_motor_state.i_abs_filter);
 	commands_printf("Obs_x1:       %.2f", (double)m_observer_x1);
 	commands_printf("Obs_x2:       %.2f", (double)m_observer_x2);
+	commands_printf("Encoder index:       %d", encoder_index_found());	
+	commands_printf("Encoder ang:       %.2f", (double)mcpwm_foc_get_phase_encoder());	
+
+	int hall_position = read_hall();
+	int ang_hall_int = m_conf->foc_hall_table[hall_position];
+	if (ang_hall_int > 200) {
+		commands_printf("Hall ang:       Err");	
+	} else {
+		float ang_hall_now = ((float)ang_hall_int / 200.0) * 360.0;
+		commands_printf("Hall ang:       %.2f", (double)ang_hall_now);	
+	}
+
+
 }
 
 float mcpwm_foc_get_last_adc_isr_duration(void) {
@@ -2060,11 +2087,14 @@ void mcpwm_foc_adc_int_handler(void *p, uint32_t flags) {
 
 		switch (m_conf->foc_sensor_mode) {
 		case FOC_SENSOR_MODE_ENCODER:
+			correct_encoder_with_hall(m_pll_speed);
+
 			if (encoder_index_found()) {
 				m_motor_state.phase = correct_encoder(m_phase_now_observer, m_phase_now_encoder, m_pll_speed);
 			} else {
-				// Rotate the motor in open loop if the index isn't found.
-				m_motor_state.phase = m_phase_now_encoder_no_index;
+				// Rotate the motor in hall mode if the index isn't found.
+				m_phase_now_observer = correct_hall(m_phase_now_observer, m_pll_speed, dt);
+				m_motor_state.phase = m_phase_now_observer;
 			}
 
 			if (!m_phase_override) {
@@ -2208,7 +2238,15 @@ void mcpwm_foc_adc_int_handler(void *p, uint32_t flags) {
 
 		switch (m_conf->foc_sensor_mode) {
 		case FOC_SENSOR_MODE_ENCODER:
-			m_motor_state.phase = correct_encoder(m_phase_now_observer, m_phase_now_encoder, m_pll_speed);
+			correct_encoder_with_hall(m_pll_speed);
+
+			if (encoder_index_found()) {
+				m_motor_state.phase = correct_encoder(m_phase_now_observer, m_phase_now_encoder, m_pll_speed);
+			} else {
+				// Rotate the motor in hall mode if the index isn't found.
+				m_phase_now_observer = correct_hall(m_phase_now_observer, m_pll_speed, dt);
+				m_motor_state.phase = m_phase_now_observer;
+			}
 			break;
 		case FOC_SENSOR_MODE_HALL:
 			m_phase_now_observer = correct_hall(m_phase_now_observer, m_pll_speed, dt);
@@ -3021,3 +3059,46 @@ static float correct_hall(float angle, float speed, float dt) {
 
 	return angle;
 }
+
+#define ENCODER_INDEX_HALL_POSITION 1
+#define ENCODER_MAX_ERROR_DEGREES 10
+
+static void correct_encoder_with_hall(float speed) {
+	static int ang_hall_int_prev = -1;
+	float rpm_abs = fabsf(speed / ((2.0 * M_PI) / 60.0));
+
+	int hall_position = read_hall();
+	int ang_hall_int = m_conf->foc_hall_table[hall_position];
+
+	if (ang_hall_int > 200) {
+		// Invalid hall reading. Don't update angle.
+		ang_hall_int_prev = -1;
+		return;
+	}
+
+	if (ang_hall_int != ang_hall_int_prev) {
+		float ang_encoder = mcpwm_foc_get_phase_encoder();
+		float ang_hall = ((float)ang_hall_int / 200.0) * 360.0;
+
+		// "Index" hall position
+		if (hall_position == ENCODER_INDEX_HALL_POSITION) {
+			if (!encoder_index_found()) {
+				m_conf->foc_encoder_offset = -ang_hall;
+				encoder_set_index();
+			} else {
+
+				// Don't apply if spining too fast.
+				if (rpm_abs < 100) {
+					float error = utils_angle_difference(ang_encoder, ang_hall);
+					if (fabsf(error) > ENCODER_MAX_ERROR_DEGREES) {
+						// Correct encoder error
+						m_conf->foc_encoder_offset += error;
+					}
+				}
+			}
+		}
+	}
+
+	ang_hall_int_prev = ang_hall_int;
+}
+

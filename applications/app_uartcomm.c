@@ -95,12 +95,14 @@ void app_uartcomm_start(void) {
 	}
 
 	sdStart(&HW_UART_DEV, &uart_cfg);
+	#ifndef HW_UART_DISABLE
 	palSetPadMode(HW_UART_TX_PORT, HW_UART_TX_PIN, PAL_MODE_ALTERNATE(HW_UART_GPIO_AF) |
 			PAL_STM32_OSPEED_HIGHEST |
 			PAL_STM32_PUDR_PULLUP);
 	palSetPadMode(HW_UART_RX_PORT, HW_UART_RX_PIN, PAL_MODE_ALTERNATE(HW_UART_GPIO_AF) |
 			PAL_STM32_OSPEED_HIGHEST |
 			PAL_STM32_PUDR_PULLUP);
+	#endif
 
 	uart_is_running = true;
 }
@@ -130,8 +132,10 @@ void app_uartcomm_start_permanent(void) {
 
 void app_uartcomm_stop(void) {
 	sdStop(&HW_UART_DEV);
+	#ifndef HW_UART_DISABLE
 	palSetPadMode(HW_UART_TX_PORT, HW_UART_TX_PIN, PAL_MODE_INPUT_PULLUP);
 	palSetPadMode(HW_UART_RX_PORT, HW_UART_RX_PIN, PAL_MODE_INPUT_PULLUP);
+	#endif
 	uart_is_running = false;
 
 	// Notice that the processing thread is kept running in case this call is made from it.

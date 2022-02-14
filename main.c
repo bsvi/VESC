@@ -124,18 +124,27 @@ static THD_FUNCTION(periodic_thread, arg) {
 		}
 
 		disp_pos_mode display_mode = commands_get_disp_pos_mode();
-
+		static uint8_t toggle;
 		switch (display_mode) {
 		case DISP_POS_MODE_ENCODER:
-			commands_send_rotor_pos(encoder_read_deg());
+			//commands_send_rotor_pos(encoder_read_deg());
+			commands_send_rotor_pos(mcpwm_foc_get_phase_encoder());
 			break;
 
 		case DISP_POS_MODE_PID_POS:
-			commands_send_rotor_pos(mc_interface_get_pid_pos_now());
+			//commands_send_rotor_pos(mc_interface_get_pid_pos_now());
+			commands_send_rotor_pos(mcpwm_foc_get_hall_phase());
 			break;
 
 		case DISP_POS_MODE_PID_POS_ERROR:
-			commands_send_rotor_pos(utils_angle_difference(mc_interface_get_pid_pos_set(), mc_interface_get_pid_pos_now()));
+			if (toggle == 0) {
+				toggle = 1;
+				commands_send_rotor_pos(mcpwm_foc_get_phase_encoder());
+			} else {
+				commands_send_rotor_pos(mcpwm_foc_get_hall_phase());
+				toggle = 0;
+			}
+			//commands_send_rotor_pos(utils_angle_difference(mc_interface_get_pid_pos_set(), mc_interface_get_pid_pos_now()));
 			break;
 
 		default:

@@ -42,6 +42,10 @@ bool encoder_index_found(void);
 void encoder_set_index(void);
 //VS Changes ---------------------------------------------------------------------
 
+//VS Changes ---------------------------------------------------------------------
+void encoder_set_index(void);
+//VS Changes ---------------------------------------------------------------------
+
 uint16_t encoder_spi_get_val(void);
 uint32_t encoder_spi_get_error_cnt(void);
 float encoder_spi_get_error_rate(void);

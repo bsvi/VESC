@@ -82,6 +82,7 @@ void mcpwm_foc_get_current_offsets(volatile int *curr0_offset, volatile int *cur
 void mcpwm_foc_set_current_offsets(volatile int curr0_offset, volatile int curr1_offset, volatile int curr2_offset);
 float mcpwm_foc_get_ts(void);
 bool mcpwm_foc_is_using_encoder(void);
+float mcpwm_foc_get_hall_phase(void);
 
 // Interrupt handlers
 void mcpwm_foc_tim_sample_int_handler(void);
