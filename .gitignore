@@ -3,3 +3,4 @@
 build
 .dep
 /build_hw_412/VESC_default.bin
+/*.elay
