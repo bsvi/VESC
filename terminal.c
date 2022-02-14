@@ -250,28 +250,6 @@ void terminal_process_string(char *str) {
 				commands_printf("Duty               : %.2f\n", (double)msg->duty);
 			}
 		}
-	} else if (strcmp(argv[0], "foc_zero_encoder") == 0) {
-		if (argc == 2) {
-			float current = -1.0;
-			sscanf(argv[1], "%f", &current);
-
-			if (current > 0.0 && current <= mcconf.l_current_max) {
-                if (encoder_is_configured()) {
-                    uint8_t result = mcpwm_foc_zero_encoder(current, true);
-
-                    if (result)
-                        commands_printf("Zeroed successfully");
-                    else
-                        commands_printf("Can't zero encoder");
-                } else {
-                    commands_printf("Encoder not enabled.\n");
-                }
-			} else {
-				commands_printf("Invalid argument(s).\n");
-			}
-		} else {
-			commands_printf("This command requires one argument.\n");
-		}
 	} else if (strcmp(argv[0], "foc_encoder_detect") == 0) {
 		if (argc == 2) {
 			float current = -1.0;
@@ -705,14 +683,6 @@ void terminal_process_string(char *str) {
 				encoder_sincos_get_signal_above_max_error_cnt(),
 				(double)encoder_sincos_get_signal_above_max_error_rate() * (double)100.0);
 		}
-
-		if (mcconf.m_sensor_port_mode == SENSOR_PORT_MODE_ABI) {
-		    if (encoder_index_found())
-		        commands_printf("Encoder is zeroed");
-            else
-		        commands_printf("Encoder is not zeroed yet");
-		}
-
 	}
 
 	// The help command
@@ -767,9 +737,6 @@ void terminal_process_string(char *str) {
 
 		commands_printf("can_devs");
 		commands_printf("  Prints all CAN devices seen on the bus the past second");
-
-		commands_printf("foc_zero_encoder [current]");
-		commands_printf("  Set encoder's zero point");
 
 		commands_printf("foc_encoder_detect [current]");
 		commands_printf("  Run the motor at 1Hz on open loop and compute encoder settings");

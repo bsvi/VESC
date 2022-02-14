@@ -37,12 +37,6 @@ void encoder_set_counts(uint32_t counts);
 bool encoder_index_found(void);
 
 //VS Changes ---------------------------------------------------------------------
-#define ENCODER_AUTOZERO
-#define ENCODER_ZEROING_TIME 500
-void encoder_set_index(void);
-//VS Changes ---------------------------------------------------------------------
-
-//VS Changes ---------------------------------------------------------------------
 void encoder_set_index(void);
 //VS Changes ---------------------------------------------------------------------
 

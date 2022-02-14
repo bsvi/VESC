@@ -426,12 +426,6 @@ void mc_interface_set_duty(float dutyCycle) {
 		break;
 
 	case MOTOR_TYPE_FOC:
-//VS Changes ---------------------------------------------------------------------
-#ifdef ENCODER_AUTOZERO
-	    if (encoder_is_configured() && !encoder_index_found())
-            mcpwm_foc_zero_encoder(mc_interface_get_configuration()->lo_current_max / 2, false);
-#endif
-//VS Changes ---------------------------------------------------------------------
 		mcpwm_foc_set_duty(DIR_MULT * dutyCycle);
 		break;
 
@@ -456,12 +450,6 @@ void mc_interface_set_duty_noramp(float dutyCycle) {
 		break;
 
 	case MOTOR_TYPE_FOC:
-//VS Changes ---------------------------------------------------------------------
-#ifdef ENCODER_AUTOZERO
-	    if (encoder_is_configured() && !encoder_index_found())
-            mcpwm_foc_zero_encoder(mc_interface_get_configuration()->lo_current_max / 2, false);
-#endif
-//VS Changes ---------------------------------------------------------------------
 		mcpwm_foc_set_duty_noramp(DIR_MULT * dutyCycle);
 		break;
 
@@ -486,12 +474,6 @@ void mc_interface_set_pid_speed(float rpm) {
 		break;
 
 	case MOTOR_TYPE_FOC:
-//VS Changes ---------------------------------------------------------------------
-#ifdef ENCODER_AUTOZERO
-	    if (encoder_is_configured() && !encoder_index_found())
-            mcpwm_foc_zero_encoder(mc_interface_get_configuration()->lo_current_max / 2, false);
-#endif
-//VS Changes ---------------------------------------------------------------------
 		mcpwm_foc_set_pid_speed(DIR_MULT * rpm);
 		break;
 
@@ -519,12 +501,6 @@ void mc_interface_set_pid_pos(float pos) {
 		break;
 
 	case MOTOR_TYPE_FOC:
-//VS Changes ---------------------------------------------------------------------
-#ifdef ENCODER_AUTOZERO
-	    if (encoder_is_configured() && !encoder_index_found())
-            mcpwm_foc_zero_encoder(mc_interface_get_configuration()->lo_current_max / 2, false);
-#endif
-//VS Changes ---------------------------------------------------------------------
 		mcpwm_foc_set_pid_pos(pos);
 		break;
 
@@ -549,12 +525,6 @@ void mc_interface_set_current(float current) {
 		break;
 
 	case MOTOR_TYPE_FOC:
-//VS Changes ---------------------------------------------------------------------
-#ifdef ENCODER_AUTOZERO
-	    if (encoder_is_configured() && !encoder_index_found())
-            mcpwm_foc_zero_encoder(mc_interface_get_configuration()->lo_current_max / 2, false);
-#endif
-//VS Changes ---------------------------------------------------------------------
 		mcpwm_foc_set_current(DIR_MULT * current);
 		break;
 

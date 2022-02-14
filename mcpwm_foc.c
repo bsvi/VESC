@@ -1060,89 +1060,6 @@ void mcpwm_foc_get_current_offsets(volatile int *curr0_offset, volatile int *cur
 #endif
 }
 
-//VS Changes ---------------------------------------------------------------------
-uint8_t mcpwm_foc_zero_encoder_internal(bool print) {
-    uint8_t result = 0;
-
-    //Prevent multiple execution
-    static uint8_t is_running = 0;
-    if (!is_running) {
-        is_running = 1;
-
-        if (print)
-            commands_printf("Encoder zeroing started");
-
-        //Set zero phase and wait until reached
-        m_phase_now_override = M_PI / 2.0;
-        chThdSleepMilliseconds(ENCODER_ZEROING_TIME);
-
-        float last_encoder_angle = encoder_read_deg();
-        float avg_error = 0;
-        for(int i = 0; i < ENCODER_ZEROING_TIME; i++) {
-
-            float cur_enc_angle = encoder_read_deg();
-
-            float error = last_encoder_angle - cur_enc_angle;
-            if (error > 180)
-                error = 360 - error;
-            else if (error < -180)
-                error = -360 - error;
-
-            avg_error += error;
-
-            last_encoder_angle = cur_enc_angle;
-            chThdSleepMilliseconds(1);
-        }
-
-        result = (float)fabs(avg_error) <= 5 * (360.0f / m_conf->m_encoder_counts);
-        if (result)
-            encoder_set_index();
-
-        if (print)
-            commands_printf("%s (AVG error = %6.5f)", result ? "SUCCESS" : "FAILURE", (double)avg_error);
-
-        is_running = 0;
-    }
-
-    return result;
-}
-
-uint8_t mcpwm_foc_zero_encoder(float current, bool print) {
-	mc_interface_lock();
-
-	m_phase_override = true;
-	m_id_set = current;
-	m_iq_set = 0.0;
-	m_control_mode = CONTROL_MODE_CURRENT;
-	m_state = MC_STATE_RUNNING;
-
-	// Disable timeout
-	systime_t tout = timeout_get_timeout_msec();
-	float tout_c = timeout_get_brake_current();
-	timeout_reset();
-	timeout_configure(5000, 0.0);
-
-
-    uint8_t result = mcpwm_foc_zero_encoder_internal(print);
-
-
-    m_id_set = 0.0;
-	m_iq_set = 0.0;
-	m_phase_override = false;
-	m_control_mode = CONTROL_MODE_NONE;
-	m_state = MC_STATE_OFF;
-	stop_pwm_hw();
-
-	// Enable timeout
-	timeout_configure(tout, tout_c);
-
-	mc_interface_unlock();
-
-	return result;
-}
-//VS Changes ---------------------------------------------------------------------
-
-
 /**
  * Measure encoder offset and direction.
  *
@@ -1182,26 +1099,20 @@ void mcpwm_foc_encoder_detect(float current, bool print, float *offset, float *r
 	m_conf->foc_encoder_inverted = false;
 	m_conf->foc_encoder_ratio = 1.0;
 
-//VS Changes ---------------------------------------------------------------------
 	// Find index
-//	int cnt = 0;
-//	while(!encoder_index_found()) {
-//		for (float i = 0.0;i < 2.0 * M_PI;i += (2.0 * M_PI) / 500.0) {
-//			m_phase_now_override = i;
-//			chThdSleepMilliseconds(1);
-//		}
-//
-//		cnt++;
-//		if (cnt > 30) {
-//			// Give up
-//			break;
-//		}
-//	}
+	int cnt = 0;
+	while(!encoder_index_found()) {
+		for (float i = 0.0;i < 2.0 * M_PI;i += (2.0 * M_PI) / 500.0) {
+			m_phase_now_override = i;
+			chThdSleepMilliseconds(1);
+		}
 
-    if (!encoder_index_found())
-        mcpwm_foc_zero_encoder_internal(print);
-
-//VS Changes ---------------------------------------------------------------------
+		cnt++;
+		if (cnt > 30) {
+			// Give up
+			break;
+		}
+	}
 
 	if (print) {
 		commands_printf("Index found");
