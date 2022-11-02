@@ -117,17 +117,23 @@
 #define HW_UART_RX_PIN			7
 
 // ICU Peripheral for servo decoding
-#define HW_USE_SERVO_TIM4
-#define HW_ICU_TIMER			TIM4
-#define HW_ICU_TIM_CLK_EN()		RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE)
-#define HW_ICU_DEV				ICUD4
+#define HW_USE_SERVO_TIM2
+#define HW_ICU_TIMER			TIM2
+#define HW_ICU_TIM_CLK_EN()		RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE)
+#define HW_ICU_DEV			ICUD2
 #define HW_ICU_CHANNEL			ICU_CHANNEL_1
-#define HW_ICU_GPIO_AF			GPIO_AF_TIM4
-#define HW_ICU_GPIO				GPIOB
-#define HW_ICU_PIN				5
+#define HW_ICU_GPIO_AF			GPIO_AF_TIM2
+#define HW_ICU_GPIO			GPIOA
+#define HW_ICU_PIN			5
+
+#define HW_CAN_ID_1_GPIO		GPIOA
+#define HW_CAN_ID_1_PIN			5
+#define HW_CAN_ID_2_GPIO		GPIOA
+#define HW_CAN_ID_2_PIN			6
+extern uint8_t hw_can_address_offset;
 
 // I2C Peripheral
-#define HW_I2C_DEV				I2CD2
+#define HW_I2C_DEV			I2CD2
 #define HW_I2C_GPIO_AF			GPIO_AF_I2C2
 #define HW_I2C_SCL_PORT			GPIOB
 #define HW_I2C_SCL_PIN			10

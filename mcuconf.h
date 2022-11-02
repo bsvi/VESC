@@ -208,11 +208,16 @@
  * ICU driver system settings.
  */
 #define STM32_ICU_USE_TIM1                  FALSE
-#define STM32_ICU_USE_TIM2                  FALSE
 #ifdef HW_USE_SERVO_TIM4
 #define STM32_ICU_USE_TIM3                  FALSE
 #define STM32_ICU_USE_TIM4                  TRUE
+#define STM32_ICU_USE_TIM2                  FALSE
+#elif defined(HW_USE_SERVO_TIM2)
+#define STM32_ICU_USE_TIM2                  TRUE
+#define STM32_ICU_USE_TIM3                  FALSE
+#define STM32_ICU_USE_TIM4                  FALSE
 #else
+#define STM32_ICU_USE_TIM2                  FALSE
 #define STM32_ICU_USE_TIM3                  TRUE
 #define STM32_ICU_USE_TIM4                  FALSE
 #endif

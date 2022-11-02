@@ -56,6 +56,8 @@ static int rx_frame_read;
 static int rx_frame_write;
 static thread_t *process_tp = 0;
 static thread_t *ping_tp = 0;
+
+static uint8_t can_id = 0;
 #endif
 
 // Variables
@@ -87,6 +89,23 @@ static void set_timing(int brp, int ts1, int ts2);
 // Function pointers
 static void(*sid_callback)(uint32_t id, uint8_t *data, uint8_t len) = 0;
 
+uint8_t get_can_id() {
+	uint8_t id = 255;
+
+	app_configuration appconf;
+	conf_general_read_app_configuration(&appconf);
+
+	id = app_get_configuration()->controller_id;
+
+	if (appconf.app_to_use != APP_PPM) {
+		uint8_t offset = palReadPad(HW_CAN_ID_1_GPIO, HW_CAN_ID_1_PIN) ? 1 : 0;
+		offset |= palReadPad(HW_CAN_ID_2_GPIO, HW_CAN_ID_2_PIN) ? 2 : 0;
+		id += offset;
+	}
+
+	return id;
+}
+
 void comm_can_init(void) {
 	for (int i = 0;i < CAN_STATUS_MSGS_TO_STORE;i++) {
 		stat_msgs[i].id = -1;
@@ -99,6 +118,7 @@ void comm_can_init(void) {
 	rx_frame_read = 0;
 	rx_frame_write = 0;
 
+	can_id = get_can_id();
 	chMtxObjectInit(&can_mtx);
 	chMtxObjectInit(&can_rx_mtx);
 
@@ -215,7 +235,7 @@ void comm_can_send_buffer(uint8_t controller_id, uint8_t *data, unsigned int len
 
 	if (len <= 6) {
 		uint32_t ind = 0;
-		send_buffer[ind++] = app_get_configuration()->controller_id;
+		send_buffer[ind++] = can_id;
 		send_buffer[ind++] = send;
 		memcpy(send_buffer + ind, data, len);
 		ind += len;
@@ -261,7 +281,7 @@ void comm_can_send_buffer(uint8_t controller_id, uint8_t *data, unsigned int len
 		}
 
 		uint32_t ind = 0;
-		send_buffer[ind++] = app_get_configuration()->controller_id;
+		send_buffer[ind++] = can_id;
 		send_buffer[ind++] = send;
 		send_buffer[ind++] = len >> 8;
 		send_buffer[ind++] = len & 0xFF;
@@ -397,7 +417,7 @@ bool comm_can_ping(uint8_t controller_id) {
 	chEvtGetAndClearEvents(ALL_EVENTS);
 
 	uint8_t buffer[1];
-	buffer[0] = app_get_configuration()->controller_id;
+	buffer[0] = can_id;
 	comm_can_transmit_eid(controller_id |
 			((uint32_t)CAN_PACKET_PING << 8), buffer, 1);
 
@@ -425,7 +445,7 @@ bool comm_can_ping(uint8_t controller_id) {
 void comm_can_detect_apply_all_foc(uint8_t controller_id, bool activate_status_msgs, float max_power_loss) {
 	int32_t send_index = 0;
 	uint8_t buffer[6];
-	buffer[send_index++] = app_get_configuration()->controller_id;
+	buffer[send_index++] = can_id;
 	buffer[send_index++] = activate_status_msgs;
 	buffer_append_float32(buffer, max_power_loss, 1e3, &send_index);
 	comm_can_transmit_eid(controller_id |
@@ -793,7 +813,7 @@ static THD_FUNCTION(cancom_process_thread, arg) {
 				uint8_t id = rxmsg.EID & 0xFF;
 				CAN_PACKET_ID cmd = rxmsg.EID >> 8;
 
-				if (id == 255 || id == app_get_configuration()->controller_id) {
+				if (id == 255 || id == can_id) {
 					switch (cmd) {
 					case CAN_PACKET_SET_DUTY:
 						ind = 0;
@@ -916,7 +936,7 @@ static THD_FUNCTION(cancom_process_thread, arg) {
 
 					case CAN_PACKET_PING: {
 						uint8_t buffer[1];
-						buffer[0] = app_get_configuration()->controller_id;
+						buffer[0] = can_id;
 						comm_can_transmit_eid(rxmsg.data8[0] |
 								((uint32_t)CAN_PACKET_PONG << 8), buffer, 1);
 					} break;
