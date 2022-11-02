@@ -31,7 +31,7 @@
 #if SERVO_OUT_ENABLE
 
 void servo_simple_init(void) {
-/*	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
+	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
 	TIM_OCInitTypeDef  TIM_OCInitStructure;
 
 	palSetPadMode(HW_ICU_GPIO, HW_ICU_PIN, PAL_MODE_ALTERNATE(HW_ICU_GPIO_AF) |
@@ -63,11 +63,11 @@ void servo_simple_init(void) {
 
 	servo_simple_set_output(0.5);
 
-	TIM_Cmd(HW_ICU_TIMER, ENABLE);*/
+	TIM_Cmd(HW_ICU_TIMER, ENABLE);
 }
 
 void servo_simple_set_output(float out) {
-/*	utils_truncate_number(&out, 0.0, 1.0);
+	utils_truncate_number(&out, 0.0, 1.0);
 
 	float us = (float)SERVO_OUT_PULSE_MIN_US + out *
 			(float)(SERVO_OUT_PULSE_MAX_US - SERVO_OUT_PULSE_MIN_US);
@@ -77,7 +77,7 @@ void servo_simple_set_output(float out) {
 		HW_ICU_TIMER->CCR1 = (uint32_t)us;
 	} else if (HW_ICU_CHANNEL == ICU_CHANNEL_2) {
 		HW_ICU_TIMER->CCR2 = (uint32_t)us;
-	}*/
+	}
 }
 
 #endif
