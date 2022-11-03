@@ -39,6 +39,18 @@ const app_configuration* app_get_configuration(void) {
 	return &appconf;
 }
 
+uint8_t get_can_id(app_configuration *conf) {
+	uint8_t id = conf->controller_id;
+
+	if (conf->app_to_use != APP_PPM) {
+		uint8_t offset = palReadPad(HW_CAN_ID_1_GPIO, HW_CAN_ID_1_PIN) ? 1 : 0;
+		offset |= palReadPad(HW_CAN_ID_2_GPIO, HW_CAN_ID_2_PIN) ? 2 : 0;
+		id += offset;
+	}
+
+	return id;
+}
+
 /**
  * Reconfigure and restart all apps. Some apps don't have any configuration options.
  *
@@ -47,6 +59,9 @@ const app_configuration* app_get_configuration(void) {
  */
 void app_set_configuration(app_configuration *conf) {
 	appconf = *conf;
+
+	// Replace controller_id with detected by pins
+	appconf.controller_id = get_can_id(conf);
 
 	app_ppm_stop();
 	app_adc_stop();
